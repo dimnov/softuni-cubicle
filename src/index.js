@@ -16,8 +16,6 @@ handlebarsConfig(app);
 app.use(homeController);
 app.use('/cubes', cubeController);
 
-
-
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
