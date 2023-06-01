@@ -1,38 +1,38 @@
 const Cube = require('../models/Cube');
 
-const uniqid = require('uniqid');
-const cubes = [];
-
 exports.getAll = async (search, from, to) => {
-  let result = await Cube.find().lean();
+    let result = await Cube.find().lean();
 
-  if (search) {
-    result = result.filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()));
-  }
+    // TODO: use mongoose to filter in the db
+    if (search) {
+        result = result.filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()));
+    }
 
-  if (from) {
-    result = result.filter(cube => cube.difficultyLevel >= Number(from));
-  }
+    if (from) {
+        result = result.filter(cube => cube.difficultyLevel >= Number(from));
+    }
 
-  if (to) {
-    result = result.filter(cube => cube.difficultyLevel <= Number(to));
-  }
+    if (to) {
+        result = result.filter(cube => cube.difficultyLevel <= Number(to));
+    }
 
-  return result;
+    return result;
 };
+
 exports.getOne = (cubeId) => Cube.findById(cubeId);
+exports.getOneWithAccessories = (cubeId) => this.getOne(cubeId).populate('accessories');
 
 exports.create = (cubeData) => {
-  const cube = new Cube(cubeData);
+    const cube = new Cube(cubeData);
 
-  return cube.save();
+    return cube.save();
 };
 
 exports.attachAccessory = async (cubeId, accessoryId) => {
-  return Cube.findByIdAndUpdate(cubeId, { $push: { accessories: accessoryId } });
+    // return Cube.findByIdAndUpdate(cubeId, { $push: { accessories: accessoryId } });
 
-  // const cube = await Cube.findById(cubeId);
-  // cube.accessories.push(accessoryId);
+    const cube = await Cube.findById(cubeId);
+    cube.accessories.push(accessoryId);
 
-  // return await cube.save();
-}
+    return cube.save();
+};

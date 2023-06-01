@@ -7,9 +7,8 @@ const accessoryController = require('./controllers/accessoryController');
 router.use(homeController);
 router.use('/cubes', cubeController);
 router.use('/accessories', accessoryController);
-router.use('*', (req, res) => {
-  res.render('404');
-})
-
+router.get('*', (req, res) => {
+    res.redirect('/404');
+});
 
 module.exports = router;
